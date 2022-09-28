@@ -1,5 +1,6 @@
 <?php
-header("refresh: 1;"); // Auto refresh strony co sekundę
+// header("refresh: 1;"); // Auto refresh strony co sekundę
+//  WCZESNA ALPHA
 $lorem = file_get_contents('http://loripsum.net/api');
 $wyszukaj = "";
 $kolumny = 4;
@@ -52,14 +53,56 @@ function renderHTMLTable($tablica, $kolumny)
     return $table;
 }
 echo renderHTMLTable($lorem, $kolumny);
-// Niestety eksportuje pusty plik CSV
-$file = fopen("array.csv", "w");
+// // Niestety eksportuje pusty plik CSV
+// $file = fopen("array.csv", "w");
 
-foreach ($slowa as $row) {
-    fputcsv($f, $row);
+// foreach ($slowa as $row) {
+//     fputcsv($f, $row);
+// }
+// // Close the file
+// fclose($f);
+echo '<br>';
+echo '-----------------------------------------------------------------------------------------------------';
+
+
+function renderMDTable($tablica, $kolumny)
+{
+    $table = '';
+    $slowa = explode(" ", $tablica);
+    $liczba = 0;
+    foreach ($slowa as $slowo) {
+        if (
+            $liczba % $kolumny == 0
+        ) {
+            $table .= '|';
+        }
+        if (
+            $liczba < $kolumny
+        ) {
+            $table .= '|' . $slowo . '|';
+            $table .= '-----------------' . $slowo . '-----------------';
+        } else {
+            $table .= '|' . $slowo . '|';
+        }
+        if (
+            $liczba % $kolumny == $kolumny
+        ) {
+            $table .= '|';
+        }
+        $liczba++;
+    }
+    if (
+        count(
+            $slowa
+        ) % $kolumny !== 0
+    ) {
+        $table .= '</tr>';
+    }
+    return $table;
+    echo $slowa;
 }
-// Close the file
-fclose($f);
+echo renderMDTable($lorem, $kolumny);
+
 
 
 // Zadania rozwiązywane z różnego rodzaju stronami internetowymi
